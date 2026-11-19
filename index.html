@@ -634,10 +634,16 @@ function stopFire(){
   var m = master; m.gain.linearRampToValueAtTime(0, actx.currentTime + 0.6);
   setTimeout(function(){ try{ m._src.stop(); m.disconnect(); }catch(e){} }, 700); master = null;
 }
+// Real recordings (ElevenLabs) if present; generated crackle as fallback.
+var fireAudio = new Audio("fogata.mp3"), musicAudio = new Audio("musica.mp3"), usingSynth = false;
+fireAudio.loop = true; fireAudio.volume = 0.6; musicAudio.loop = true; musicAudio.volume = 0.35;
 $("sound").addEventListener("click", function(){
-  var on = this.getAttribute("aria-pressed") === "true";
-  if (on){ stopFire(); this.setAttribute("aria-pressed","false"); $("soundLabel").textContent = "Oír la fogata"; }
-  else if (startFire()){ this.setAttribute("aria-pressed","true"); $("soundLabel").textContent = "Apagar sonido"; }
+  var btn = this, on = btn.getAttribute("aria-pressed") === "true";
+  var setOn = function(v){ btn.setAttribute("aria-pressed", v ? "true" : "false"); $("soundLabel").textContent = v ? "Apagar sonido" : "Oír la fogata"; };
+  if (on){ fireAudio.pause(); musicAudio.pause(); if (usingSynth) stopFire(); usingSynth = false; setOn(false); return; }
+  setOn(true);
+  fireAudio.play().catch(function(){ usingSynth = startFire(); if (!usingSynth) setOn(false); });
+  musicAudio.play().catch(function(){});
 });
 
 if (params.has("og")) document.body.classList.add("og");
