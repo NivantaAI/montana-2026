@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Montaña 2026</title>
+<meta name="description" content="Última reunión del año. Sube con nosotros la montaña del 2026: el viernes 20 de noviembre a las 6:00 p. m. llegamos juntos a la cima.">
+<meta property="og:title" content="La Montaña 2026">
+<meta property="og:description" content="El viernes a las 6:00 p. m. llegamos juntos a la cima. Abre el enlace: el escalador sube hora tras hora.">
+<meta property="og:image" content="https://nivantaai.github.io/montana-2026/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nivantaai.github.io/montana-2026/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#13302A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M2 28 13 8l5 8 3-4 9 16z' fill='%23F6C453'/%3E%3Cpath d='M13 8l-3 6 3-1 2 2z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#13302A; --pine-2:#1B4136; --pine-3:#2F5A45;
+  --rock:#7A6890; --rock-shade:#55456D;
+  --snow:#F3F1EC; --ember:#F07A2B; --gold:#F6C453;
+  --lake:#2E7F8A; --wood:#7A4E2D; --wood-dark:#5A3720;
+  --text:#EAF2EC; --muted:#B8D4C5;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:1fr}
+.scene{position:relative;height:min(82svh,780px);min-height:520px;overflow:hidden;background:#1d2550}
+.scene #svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay}
+.title{position:absolute;left:0;right:0;top:max(18px,env(safe-area-inset-top));text-align:center;padding:0 16px;pointer-events:none}
+.title h1{font:400 clamp(40px,11vw,76px)/.92 "Alfa Slab One",serif;margin:0;color:var(--snow);letter-spacing:.01em;
+  text-shadow:0 3px 0 var(--rock-shade),0 8px 24px rgba(10,20,40,.35)}
+.title h1 span{display:block;font-size:.62em;color:var(--gold);text-shadow:0 3px 0 var(--wood-dark)}
+.title p{margin:.55em 0 0;font-weight:600;font-size:15px;color:var(--snow);opacity:.92;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.sound{position:absolute;right:12px;bottom:14px;z-index:3;display:flex;align-items:center;gap:8px;
+  background:rgba(19,48,42,.78);color:var(--text);border:1.5px solid rgba(246,196,83,.55);border-radius:999px;
+  padding:9px 14px;font:600 14px Figtree,sans-serif;cursor:pointer;backdrop-filter:blur(6px)}
+.sound[aria-pressed="true"]{background:var(--ember);border-color:var(--ember);color:#fff}
+.toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.9);opacity:0;z-index:3;pointer-events:none;
+  font:400 clamp(34px,9vw,60px)/1 "Alfa Slab One",serif;color:var(--gold);text-shadow:0 4px 0 var(--wood-dark),0 10px 30px rgba(0,0,0,.4);
+  transition:opacity .6s,transform .6s}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+.panel{padding:22px 16px 48px;max-width:560px;margin:0 auto;width:100%}
+.sign{position:relative;background:var(--wood);border-radius:10px 10px 10px 10px;padding:16px 18px 14px;margin-top:-22px;z-index:2;
+  box-shadow:inset 0 0 0 3px var(--wood-dark),0 10px 0 -4px var(--wood-dark);
+  background-image:repeating-linear-gradient(178deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.sign::before,.sign::after{content:"";position:absolute;top:10px;width:9px;height:9px;border-radius:50%;background:var(--wood-dark);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.sign::before{left:10px}.sign::after{right:10px}
+.sign .lead{margin:0;font-weight:600;color:#F6E3CC;font-size:15px}
+.sign .count{margin:2px 0 0;font:400 clamp(30px,8.5vw,42px)/1.08 "Alfa Slab One",serif;color:var(--snow)}
+.sign .count small{font-size:.5em;color:var(--gold)}
+.sign .date{margin:6px 0 0;color:#F6E3CC;font-size:15px}
+
+.stop{margin-top:30px}
+.stop .when{margin:0;color:var(--gold);font-weight:700;font-size:15px}
+.stop h2{font:400 clamp(28px,7vw,36px)/1.1 "Alfa Slab One",serif;margin:.15em 0 .45em;color:var(--snow)}
+.stop .body{margin:0 0 1em;font-size:18px}
+.verse{margin:0 0 1.1em;padding:12px 0 12px 16px;border-left:4px solid var(--gold);font-size:18px;line-height:1.5;color:#F7F0DC}
+.verse cite{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:14px;color:var(--gold)}
+.prompt{margin:0 0 1.2em;font-weight:600;color:var(--snow)}
+.backpack{background:var(--pine-2);border-radius:14px;padding:14px;border:1.5px dashed rgba(246,196,83,.35)}
+.backpack label{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:4px}
+.backpack .help{margin:0 0 10px;color:var(--muted);font-size:14px}
+.backpack textarea{width:100%;min-height:96px;resize:vertical;border-radius:10px;border:1.5px solid #3c6b58;background:#0F2822;color:var(--text);
+  font:400 16px/1.5 Figtree,sans-serif;padding:10px 12px}
+.backpack textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(246,196,83,.25)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap}
+.saved{color:var(--muted);font-size:13px;min-height:1em}
+.btn{background:transparent;color:var(--gold);border:1.5px solid var(--gold);border-radius:999px;padding:8px 14px;font:700 14px Figtree,sans-serif;cursor:pointer}
+.btn:hover{background:rgba(246,196,83,.12)}
+.next{margin:16px 0 0;color:var(--muted);font-size:15px}
+.back{margin-top:14px}
+
+.trail,.bring,.where{margin-top:40px}
+.panel h3{font:400 24px/1.2 "Alfa Slab One",serif;margin:0 0 14px;color:var(--snow)}
+.trail ol{list-style:none;margin:0;padding:0;position:relative}
+.trail ol::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;border-left:2.5px dashed rgba(169,194,181,.35)}
+.trail li{position:relative}
+.trail button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:center;width:100%;padding:8px 6px 8px 0;cursor:pointer;border-radius:10px}
+.trail button:focus-visible,.btn:focus-visible,.sound:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.trail .dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--pine-2);border:2px solid #3c6b58;position:relative;z-index:1}
+.trail .dot svg{width:16px;height:16px}
+.trail .t{display:block;font-weight:700}
+.trail .h{display:block;color:var(--muted);font-size:14px}
+.trail li.done .dot{background:var(--pine-3);border-color:var(--gold)}
+.trail li.now .dot{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 6px rgba(246,196,83,.35),0 0 12px rgba(246,196,83,.5)}
+.trail li.now .t{color:var(--gold)}
+.trail li.locked button{cursor:default}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.trail li.locked .t{color:var(--muted)}
+.trail li.viewing .t{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px}
+
+.bring ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.bring li{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center}
+.bring .ic{width:52px;height:52px;border-radius:14px;background:var(--pine-2);display:grid;place-items:center}
+.bring b{display:block}
+.bring span{color:var(--muted);font-size:15px}
+.where p{margin:0 0 6px}
+.maps{display:inline-block;margin-top:10px;text-decoration:none}
+.where .big{font:400 22px/1.25 "Alfa Slab One",serif;color:var(--gold)}
+footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
+
+/* scene animation */
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.1s ease-in-out infinite alternate}
+.flame.f2{animation-duration:.8s;animation-delay:-.3s}
+.flame.f3{animation-duration:.65s;animation-delay:-.5s}
+@keyframes flick{0%{transform:scale(1,1) skewX(0)}50%{transform:scale(.92,1.12) skewX(3deg)}100%{transform:scale(1.05,.9) skewX(-3deg)}}
+.glow{animation:glow 2.2s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.55}to{opacity:.85}}
+.ember{animation:rise 3.2s linear infinite;transform-box:fill-box}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx,6px),-70px);opacity:0}}
+.cloud{animation:drift 90s linear infinite}
+.cloud.c2{animation-duration:130s;animation-delay:-60s}
+@keyframes drift{from{transform:translateX(-500px)}to{transform:translateX(900px)}}
+.bob{animation:bob 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
+.fish{animation:jump 9s ease-in-out infinite;opacity:0}
+@keyframes jump{0%,80%{opacity:0;transform:translate(0,0) rotate(0)}83%{opacity:1;transform:translate(8px,-14px) rotate(-30deg)}86%{opacity:1;transform:translate(16px,-18px) rotate(10deg)}90%{opacity:0;transform:translate(24px,-2px) rotate(50deg)}100%{opacity:0}}
+.leg{transform-box:fill-box;transform-origin:50% 0;animation:step .7s ease-in-out infinite alternate}
+.leg.l2{animation-direction:alternate-reverse}
+@keyframes step{from{transform:rotate(22deg)}to{transform:rotate(-22deg)}}
+.zzz text{font:700 9px Figtree,sans-serif;fill:#fff;animation:zz 3s ease-in-out infinite}
+.zzz text:nth-child(2){animation-delay:1s}.zzz text:nth-child(3){animation-delay:2s}
+@keyframes zz{0%{opacity:0;transform:translate(0,0)}30%{opacity:1}100%{opacity:0;transform:translate(10px,-22px)}}
+.star{animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.35}to{opacity:1}}
+.flagcloth{transform-box:fill-box;transform-origin:0 50%;animation:wave 1.4s ease-in-out infinite alternate}
+@keyframes wave{from{transform:skewY(-6deg) scaleX(1)}to{transform:skewY(6deg) scaleX(.9)}}
+.cairn-now{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.8}}
+
+@media (min-width:980px){
+  .app{grid-template-columns:minmax(0,1fr) 470px;min-height:100vh}
+  .scene{position:sticky;top:0;height:100vh;max-height:none}
+  .panel{max-width:none;padding:40px 32px 48px;height:100vh;overflow:auto}
+  .sign{margin-top:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body.og .panel,body.og .sound{display:none}
+body.og .app{display:block}
+body.og .scene{height:100vh;max-height:none}
+body.og .title{text-align:left;left:70px;right:auto;top:150px;width:520px}
+body.og .title h1{font-size:100px}
+body.og .title p{font-size:28px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="scene" id="scene">
+    <svg id="svg" viewBox="0 -60 400 760" preserveAspectRatio="xMidYMax slice" aria-labelledby="scene-desc" role="img">
+      <desc id="scene-desc">Una montaña con un sendero en zigzag. Un escalador va subiendo hacia la cima. Abajo hay un campamento con una carpa, una fogata con masmelos y un lago con una caña de pescar.</desc>
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop id="sky0" offset="0" stop-color="#14213D"/>
+          <stop id="sky1" offset="1" stop-color="#2B2F5A"/>
+        </linearGradient>
+        <radialGradient id="fireglow">
+          <stop offset="0" stop-color="#FFB347" stop-opacity=".9"/>
+          <stop offset=".4" stop-color="#F07A2B" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#F07A2B" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="sunglow">
+          <stop offset="0" stop-color="#FFF3C4" stop-opacity=".9"/>
+          <stop offset="1" stop-color="#FFF3C4" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="lakeg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3C97A1"/><stop offset="1" stop-color="#22626B"/>
+        </linearGradient>
+      </defs>
+
+      <rect x="-900" y="-600" width="2200" height="1400" fill="url(#sky)"/>
+      <g id="stars"></g>
+      <g id="sun"><circle r="46" fill="url(#sunglow)"/><circle r="17" fill="#FFE9A8"/></g>
+      <g id="moon"><circle r="15" fill="#F3F1EC"/><circle cx="6" cy="-4" r="13" id="moonbite" fill="#14213D"/></g>
+
+      <g opacity=".85">
+        <g class="cloud"><path d="M40 60h70a14 14 0 0 0-14-14 18 18 0 0 0-32-6 12 12 0 0 0-24 6z" fill="#fff" opacity=".55"/></g>
+        <g class="cloud c2"><path d="M160 20h90a16 16 0 0 0-18-16 20 20 0 0 0-38-8 14 14 0 0 0-34 8z" fill="#fff" opacity=".4"/></g>
+      </g>
+
+      <!-- far ridges -->
+      <path d="M-900 430 L-640 330 L-420 410 L-260 300 L-90 400 L40 330 L140 420 L320 310 L470 400 L620 300 L820 390 L1000 320 L1300 420 V800 H-900Z" fill="#5E4E7A" opacity=".55"/>
+      <path d="M-900 520 L-700 440 L-500 500 L-330 420 L-160 500 L-20 450 L120 520 L380 470 L560 520 L740 440 L960 510 L1300 460 V800 H-900Z" fill="#43597A" opacity=".75"/>
+
+      <!-- main mountain -->
+      <path d="M-120 640 L-20 560 L60 500 L110 385 L210 128 L322 362 L380 450 L470 560 L560 640Z" fill="var(--rock)"/>
+      <path d="M210 128 L322 362 L380 450 L470 560 L560 640 L260 640 L300 520 L250 400 L268 300Z" fill="var(--rock-shade)"/>
+      <path d="M210 128 L176 214 L190 206 L200 222 L214 204 L228 220 L240 200 L250 210 Z" fill="var(--snow)"/>
+      <path d="M210 128 L250 210 L240 200 L228 220 L222 196 Z" fill="#D7D9E3"/>
+
+      <!-- trail -->
+      <path id="trail" d="M205 612 L285 540 L150 470 L265 395 L172 320 L245 252 L200 196 L210 138" fill="none" stroke="#E8DCC6" stroke-opacity=".55" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path id="trailDone" d="M205 612 L285 540 L150 470 L265 395 L172 320 L245 252 L200 196 L210 138" fill="none" stroke="var(--gold)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <g id="cairns"></g>
+
+      <!-- bivouac tent -->
+      <g id="bivy">
+        <path d="M-15 0 L0 -18 L15 0Z" fill="var(--ember)"/>
+        <path d="M0 -18 L-4 0 H4Z" fill="#7A3414"/>
+        <g class="zzz" id="zzz"><text x="10" y="-20">z</text><text x="14" y="-26">z</text><text x="18" y="-32">Z</text></g>
+      </g>
+
+      <!-- summit flag -->
+      <g id="flag" transform="translate(212 132)">
+        <line x1="0" y1="0" x2="0" y2="-36" stroke="#E8DCC6" stroke-width="2"/>
+        <path class="flagcloth" d="M1 -36 L26 -29 L1 -22Z" fill="var(--gold)"/>
+      </g>
+
+      <!-- foreground -->
+      <path d="M-900 640 Q-300 600 0 628 T420 618 T1300 630 V900 H-900Z" fill="var(--pine-3)"/>
+      <path d="M-900 676 Q-200 650 120 672 T700 664 T1300 676 V900 H-900Z" fill="var(--pine-2)"/>
+
+      <!-- trees -->
+      <g id="trees" fill="#1E4A3A"></g>
+
+      <!-- lake + fishing -->
+      <ellipse cx="70" cy="664" rx="78" ry="17" fill="url(#lakeg)"/>
+      <path d="M20 662 h18 M60 670 h26 M98 660 h14" stroke="#9FD6DB" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+      <g class="fish" transform="translate(52 664)"><path d="M0 0 q6 -5 12 0 q-6 5 -12 0z M12 0 l5 -4 v8z" fill="var(--ember)"/></g>
+      <line x1="150" y1="676" x2="100" y2="626" stroke="#5A3720" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M100 626 Q90 640 92 662" fill="none" stroke="#E8DCC6" stroke-width=".8"/>
+      <g class="bob"><circle cx="92" cy="662" r="2.6" fill="#E8443A"/></g>
+
+      <!-- base camp -->
+      <g transform="translate(318 662)">
+        <path d="M-58 0 L-30 -40 L-2 0Z" fill="var(--gold)"/>
+        <path d="M-30 -40 L-38 0 H-22Z" fill="#8C5A12"/>
+        <path d="M-30 -40 L-2 0 H-14Z" fill="#D9A93A"/>
+      </g>
+      <g id="nightshade"><rect x="-900" y="-600" width="2200" height="1500" fill="#0E1A36" opacity="0" id="shade"/></g>
+      <g transform="translate(330 664)" id="fire">
+        <circle class="glow" r="70" fill="url(#fireglow)" id="fireglowc"/>
+        <path d="M-12 2 L12 -3 M-12 -3 L12 2" stroke="#5A3720" stroke-width="4" stroke-linecap="round"/>
+        <path class="flame" d="M-9 0 Q-11 -14 -2 -24 Q-3 -12 4 -10 Q8 -16 6 -22 Q14 -10 9 0Z" fill="#F07A2B"/>
+        <path class="flame f2" d="M-6 0 Q-7 -10 0 -17 Q0 -9 4 -8 Q8 -10 6 -14 Q10 -6 6 0Z" fill="#F6C453"/>
+        <path class="flame f3" d="M-3 0 Q-3 -6 1 -10 Q2 -5 3 0Z" fill="#FFF3C4"/>
+        <line x1="22" y1="4" x2="2" y2="-22" stroke="#C9A27A" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="-1" y="-29" width="7" height="8" rx="2.5" fill="#fff" transform="rotate(-38 2 -25)"/>
+        <g id="embers"></g>
+      </g>
+
+      <!-- climber -->
+      <g id="climber">
+        <g id="walker">
+          <g class="leg"><rect x="-3.5" y="-6" width="2.6" height="9" rx="1.2" fill="#2D3A55"/></g>
+          <g class="leg l2"><rect x=".9" y="-6" width="2.6" height="9" rx="1.2" fill="#2D3A55"/></g>
+          <rect x="-7.5" y="-18" width="6" height="11" rx="2" fill="var(--gold)"/>
+          <rect x="-4" y="-17" width="8.5" height="12" rx="3" fill="var(--ember)"/>
+          <circle cx="1" cy="-21" r="3.6" fill="#E8B48A"/>
+          <path d="M-3 -22.5 Q1 -27 5 -22.5Z" fill="#2F5A45"/>
+          <g id="armWalk"><line x1="3" y1="-13" x2="8" y2="-8" stroke="var(--ember)" stroke-width="2.4" stroke-linecap="round"/><line x1="8" y1="-12" x2="9.5" y2="3" stroke="#E8DCC6" stroke-width="1.2"/></g>
+          <g id="armUp" style="display:none"><line x1="-2" y1="-14" x2="-6" y2="-26" stroke="var(--ember)" stroke-width="2.4" stroke-linecap="round"/><line x1="3" y1="-14" x2="7" y2="-26" stroke="var(--ember)" stroke-width="2.4" stroke-linecap="round"/></g>
+        </g>
+      </g>
+    </svg>
+    <canvas class="grain" id="grain" aria-hidden="true"></canvas>
+    <div class="title">
+      <h1>La Montaña <span>2026</span></h1>
+      <p>Última reunión del año</p>
+    </div>
+    <div class="toast" id="toast" aria-hidden="true">¡Llegamos!</div>
+    <button class="sound" id="sound" aria-pressed="false" type="button">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-4 0-7z" fill="currentColor"/></svg>
+      <span id="soundLabel">Oír la fogata</span>
+    </button>
+  </div>
+
+  <main class="panel">
+    <section class="sign" aria-live="polite">
+      <p class="lead" id="lead">Faltan</p>
+      <p class="count" id="count">-</p>
+      <p class="date">Viernes 20 de noviembre, 6:00 p. m.</p>
+    </section>
+
+    <article class="stop" id="stop">
+      <p class="when" id="stopWhen"></p>
+      <h2 id="stopTitle"></h2>
+      <p class="body" id="stopBody"></p>
+      <blockquote class="verse"><span id="stopVerse"></span><cite id="stopRef"></cite></blockquote>
+      <p class="prompt" id="stopPrompt"></p>
+      <div class="backpack">
+        <label for="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V5a4 4 0 0 1 8 0v1h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm2 0h4V5a2 2 0 0 0-4 0zM8 13h8v2H8z" fill="#F6C453"/></svg>Mi mochila</label>
+        <p class="help" id="note-help">Lo que escribas se queda solo en este celular. Nadie más lo ve.</p>
+        <textarea id="note" aria-describedby="note-help" placeholder="Escribe aquí lo que te viene al corazón..."></textarea>
+        <div class="row"><span class="saved" id="saved"></span><button class="btn" id="copy" type="button">Copiar mi mochila</button></div>
+      </div>
+      <button class="btn back" id="backNow" type="button" hidden>Volver a la parada de ahora</button>
+      <p class="next" id="next"></p>
+    </article>
+
+    <section class="trail">
+      <h3>El camino</h3>
+      <ol id="trailList"></ol>
+    </section>
+
+    <section class="bring">
+      <h3>Qué llevar</h3>
+      <ul>
+        <li><div class="ic"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><line x1="4" y1="28" x2="20" y2="10" stroke="#C9A27A" stroke-width="2" stroke-linecap="round"/><rect x="17" y="3" width="11" height="12" rx="4" fill="#fff" transform="rotate(42 22 9)"/></svg></div><div><b>Masmelos</b><span>Para la fogata.</span></div></li>
+        <li><div class="ic"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><line x1="6" y1="28" x2="26" y2="4" stroke="#C9A27A" stroke-width="2.2" stroke-linecap="round"/><path d="M26 4 Q30 14 27 22" fill="none" stroke="#E8DCC6" stroke-width="1"/><path d="M22 24 q4 -4 8 0 q-4 4 -8 0z M22 24 l-4 -3 v6z" fill="#F07A2B"/></svg></div><div><b>Ropa de pescador o de escalador</b><span>Si tienes. También nos vamos de pesca.</span></div></li>
+        <li><div class="ic"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M2 28 13 8l5 8 3-4 9 16z" fill="#F6C453"/><path d="M13 8l-3 6 3-1 2 2z" fill="#fff"/></svg></div><div><b>Tu 2026</b><span>Lo difícil y las victorias. Lo vamos a poner en la montaña.</span></div></li>
+      </ul>
+    </section>
+
+    <section class="where">
+      <h3>Cuándo y dónde</h3>
+      <p class="big">Viernes 20 de noviembre<br>6:00 p. m.</p>
+      <p id="place">Salón del grupo de conexión, en el teatro de la Iglesia El Lugar de Su Presencia, La Castellana, Bogotá. Allí estarán la montaña, la fogata y la zona de pesca.</p>
+      <p><a class="btn maps" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia%20El%20Lugar%20de%20Su%20Presencia%20La%20Castellana%20Bogot%C3%A1" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
+    </section>
+
+    <footer>El escalador sube con el paso de las horas. Vuelve a abrir este enlace para ver dónde va.</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+var TZ = "-05:00";
+var STAGES = [
+  {t:"2026-11-19T12:00:00", wp:0.00, title:"Campamento base",
+   body:"Este año fue una montaña. Hubo tramos duros y otros desde donde se veía todo. El viernes nos reunimos alrededor del fuego para mirar juntos el camino del 2026.",
+   verse:"El Señor es mi fortaleza; él me da pies como de cierva y me hace caminar por las alturas.", ref:"Habacuc 3:19",
+   prompt:"Mientras subimos, pídele al Espíritu Santo que te recuerde el camino que recorriste este año."},
+  {t:"2026-11-19T19:00:00", wp:0.14, title:"Las piedras del camino",
+   body:"¿Qué fue lo más difícil de tu 2026? En tu vida, en tu familia, en tu trabajo. No hace falta contarlo: basta con verlo.",
+   verse:"Cuando pases por las aguas, yo estaré contigo.", ref:"Isaías 43:2",
+   prompt:"Pídele al Espíritu Santo que te muestre esa piedra, y cómo pasaste por encima de ella."},
+  {t:"2026-11-19T22:00:00", wp:0.30, sleep:true, title:"La carpa",
+   body:"Hasta el escalador descansa. Esta noche no hay que subir más: la montaña sigue ahí mañana.",
+   verse:"En paz me acostaré y asimismo dormiré, porque solo tú, Señor, me haces vivir confiado.", ref:"Salmo 4:8",
+   prompt:"Antes de dormir, dale gracias a Dios por un día de este año que no quieres olvidar."},
+  {t:"2026-11-20T06:00:00", wp:0.30, title:"Amanecer",
+   body:"Sale el sol sobre la montaña y el escalador vuelve a ponerse las botas. Cada día del 2026 tuvo su propia mañana.",
+   verse:"Nuevas son cada mañana sus misericordias; grande es tu fidelidad.", ref:"Lamentaciones 3:23",
+   prompt:"¿En qué momento de este año Dios te dio un nuevo comienzo?"},
+  {t:"2026-11-20T10:00:00", wp:0.48, title:"La cuerda",
+   body:"Nadie sube solo. ¿Quién te sostuvo este año? Tu pareja, tus hijos, un amigo, el grupo.",
+   verse:"Cordón de tres dobleces no se rompe pronto.", ref:"Eclesiastés 4:12",
+   prompt:"Escribe sus nombres en tu mochila y, si puedes, díselo hoy."},
+  {t:"2026-11-20T13:00:00", wp:0.66, title:"El mirador",
+   body:"Desde aquí se ve todo lo que ya subiste. ¿Qué victorias te dio Dios en 2026? En tu vida, tu familia, tu trabajo.",
+   verse:"Hasta aquí nos ayudó el Señor.", ref:"1 Samuel 7:12",
+   prompt:"Samuel puso una piedra para no olvidar. ¿Cuál sería la tuya?"},
+  {t:"2026-11-20T16:00:00", wp:0.84, title:"Casi arriba",
+   body:"Ya se ve la cima. Alista los masmelos y la ropa de pesca: en un par de horas llegamos juntos.",
+   verse:"Alzaré mis ojos a los montes. ¿De dónde vendrá mi socorro? Mi socorro viene del Señor.", ref:"Salmo 121:1-2",
+   prompt:"¿Qué montaña quieres subir con Dios en 2027?"},
+  {t:"2026-11-20T18:00:00", wp:1.00, summit:true, title:"La cima",
+   body:"¡Llegamos! Te esperamos alrededor del fuego, con la montaña, los masmelos y la caña de pescar.",
+   verse:"Grandes cosas ha hecho el Señor con nosotros; estaremos alegres.", ref:"Salmo 126:3",
+   prompt:"Trae lo que guardaste en tu mochila. Hoy lo ponemos en la montaña."}
+];
+STAGES.forEach(function(s,i){ s.ts = Date.parse(s.t + TZ); s.i = i; });
+var EVENT = STAGES[STAGES.length-1].ts;
+
+// ---------- time ----------
+var params = new URLSearchParams(location.search);
+var offset = 0;
+var tParam = params.get("t");
+if (tParam){
+  var fixed = Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(tParam) ? tParam : tParam + TZ);
+  if (!isNaN(fixed)) offset = fixed - Date.now();
+}
+var speed = Number(params.get("speed")) || 1; // demo: speed=3600 -> 1 s = 1 h
+var t0 = Date.now();
+function now(){ var r = Date.now(); return t0 + offset + (r - t0) * speed; }
+function bogotaHour(ts){ var d = new Date(ts - 5*3600e3); return d.getUTCHours() + d.getUTCMinutes()/60; }
+function fmtTime(ts){
+  var d = new Date(ts - 5*3600e3), h = d.getUTCHours(), m = d.getUTCMinutes();
+  var suf = h < 12 ? "a. m." : "p. m."; var hh = h % 12 || 12;
+  return hh + ":" + (m<10?"0":"") + m + " " + suf;
+}
+var DAYS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+function fmtDay(ts){ var d = new Date(ts - 5*3600e3); return DAYS[d.getUTCDay()]; }
+function stageIndex(ts){ var idx = 0; for (var i=0;i<STAGES.length;i++){ if (ts >= STAGES[i].ts) idx = i; } return idx; }
+function progress(ts){
+  var i = stageIndex(ts), s = STAGES[i];
+  if (ts < STAGES[0].ts) return 0;
+  if (i === STAGES.length-1) return 1;
+  var n = STAGES[i+1], f = Math.min(1, Math.max(0, (ts - s.ts)/(n.ts - s.ts)));
+  return s.wp + (n.wp - s.wp) * f;
+}
+
+// ---------- svg setup ----------
+var NS = "http://www.w3.org/2000/svg";
+var svg = document.getElementById("svg"), scene = document.getElementById("scene");
+function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+var OG = new URLSearchParams(location.search).has("og");
+if (OG) document.body.classList.add("og");
+function fit(){
+  var w = scene.clientWidth, h = scene.clientHeight, a = w/h, W, H;
+  if (OG){ H = 640; W = H*a; svg.setAttribute("viewBox", (200 - W*0.66) + " 76 " + W + " " + H); return; }
+  if (a < 400/760){ W = 400; H = W/a; } else { H = 760; W = H*a; }
+  svg.setAttribute("viewBox", (200 - W/2) + " " + (712 - H) + " " + W + " " + H);
+}
+fit(); window.addEventListener("resize", fit);
+
+// deterministic random
+var seed = 7; function rnd(){ seed = (seed*16807) % 2147483647; return (seed-1)/2147483646; }
+var starsG = document.getElementById("stars");
+for (var i=0;i<70;i++){
+  var c = el("circle",{cx:(-700 + rnd()*1800).toFixed(1), cy:(-560 + rnd()*820).toFixed(1), r:(0.5+rnd()*1.3).toFixed(2), fill:"#fff"}, starsG);
+  if (i%3===0){ c.setAttribute("class","star"); c.style.animationDelay = (-rnd()*3).toFixed(2)+"s"; }
+}
+var treesG = document.getElementById("trees");
+[[-260,650,1.3],[-200,646,1],[-150,654,1.5],[-40,650,1.1],[150,640,.9],[175,648,1.2],[205,646,.8],[400,650,1.3],[430,644,1],[470,652,1.6],[560,648,1.2],[640,654,1.4]].forEach(function(p){
+  var s = p[2];
+  el("path",{d:"M"+p[0]+" "+(p[1]-40*s)+" l"+(-12*s)+" "+(22*s)+" h"+(5*s)+" l"+(-9*s)+" "+(16*s)+" h"+(32*s)+" l"+(-9*s)+" "+(-16*s)+" h"+(5*s)+"z"}, treesG);
+});
+var emberG = document.getElementById("embers");
+for (var j=0;j<7;j++){
+  var e = el("circle",{cx:(-4+rnd()*8).toFixed(1), cy:-12, r:1.1, fill:"#FFC56B", "class":"ember"}, emberG);
+  e.style.animationDelay = (-j*0.45)+"s"; e.style.setProperty("--dx", ((rnd()-.5)*24).toFixed(1)+"px");
+}
+
+var trail = document.getElementById("trail"), trailDone = document.getElementById("trailDone");
+var L = trail.getTotalLength();
+trailDone.setAttribute("stroke-dasharray", L);
+function pt(p){ return trail.getPointAtLength(Math.max(0, Math.min(L, p*L))); }
+
+var cairnsG = document.getElementById("cairns"), cairnEls = [];
+STAGES.forEach(function(s,i){
+  if (i===0 || s.summit || s.sleep) { cairnEls.push(null); return; }
+  var q = pt(s.wp), side = (i%2 ? -1 : 1);
+  var g = el("g",{transform:"translate("+(q.x+side*14).toFixed(1)+" "+(q.y+2).toFixed(1)+")"}, cairnsG);
+  el("circle",{r:11,cy:-6,fill:"#F6C453","class":"cairn-now",opacity:0}, g);
+  el("ellipse",{rx:6.5,ry:3,cy:0,fill:"#9A9AA8"}, g);
+  el("ellipse",{rx:5,ry:2.6,cy:-4.5,fill:"#B4B4C0"}, g);
+  el("ellipse",{rx:3.4,ry:2.2,cy:-8.5,fill:"#CFCFD8"}, g);
+  cairnEls.push(g);
+});
+var bivy = document.getElementById("bivy");
+(function(){ var q = pt(0.30); bivy.setAttribute("transform","translate("+(q.x-20).toFixed(1)+" "+(q.y+3).toFixed(1)+")"); })();
+
+// ---------- sky ----------
+var SKY = [
+  [0,"#14213D","#2B2F5A"],[4.8,"#14213D","#2B2F5A"],[5.6,"#2A3466","#7C5C8C"],[6.3,"#5B6FA8","#F6B27A"],
+  [7.6,"#6FB3D9","#CFE8F0"],[16.2,"#6FB3D9","#CFE8F0"],[17.3,"#4B3C7A","#F08A4B"],[18.2,"#2A2856","#B5577A"],
+  [19.2,"#14213D","#2B2F5A"],[24,"#14213D","#2B2F5A"]
+];
+function hex(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
+function mix(a,b,f){ var x=hex(a), y=hex(b); return "rgb("+x.map(function(v,k){return Math.round(v+(y[k]-v)*f);}).join(",")+")"; }
+function night(h){ // 0 day .. 1 night
+  if (h>=7.4 && h<=16.8) return 0;
+  if (h>=19.2 || h<=4.8) return 1;
+  if (h<7.4) return 1 - (h-4.8)/2.6;
+  return (h-16.8)/2.4;
+}
+var sky0 = document.getElementById("sky0"), sky1 = document.getElementById("sky1");
+var sunG = document.getElementById("sun"), moonG = document.getElementById("moon"), moonBite = document.getElementById("moonbite");
+var shade = document.getElementById("shade"), fireglow = document.getElementById("fireglowc");
+function paintSky(h){
+  for (var k=0;k<SKY.length-1;k++){
+    if (h>=SKY[k][0] && h<=SKY[k+1][0]){
+      var f = (h-SKY[k][0])/((SKY[k+1][0]-SKY[k][0])||1);
+      var top = mix(SKY[k][1],SKY[k+1][1],f), bot = mix(SKY[k][2],SKY[k+1][2],f);
+      sky0.setAttribute("stop-color", top); sky1.setAttribute("stop-color", bot); moonBite.setAttribute("fill", top);
+      break;
+    }
+  }
+  var n = night(h);
+  starsG.setAttribute("opacity", (n*n).toFixed(2));
+  shade.setAttribute("opacity", (n*0.42).toFixed(2));
+  fireglow.setAttribute("r", (55 + n*50).toFixed(0));
+  // sun arc 5.8 -> 18.2
+  var sf = (h-5.8)/12.4;
+  if (sf>0 && sf<1){ sunG.style.display=""; sunG.setAttribute("transform","translate("+(-60+460*sf).toFixed(1)+" "+(330-300*Math.sin(Math.PI*sf)).toFixed(1)+")"); }
+  else sunG.style.display="none";
+  var mh = h>=18 ? h-18 : h+6, mf = mh/12;
+  if (n>0.3){ moonG.style.display=""; moonG.setAttribute("transform","translate("+(-40+440*mf).toFixed(1)+" "+(300-260*Math.sin(Math.PI*mf)).toFixed(1)+")"); moonG.setAttribute("opacity", n.toFixed(2)); }
+  else moonG.style.display="none";
+}
+
+// ---------- climber ----------
+var climber = document.getElementById("climber"), walker = document.getElementById("walker");
+var zzz = document.getElementById("zzz"), flag = document.getElementById("flag");
+var armWalk = document.getElementById("armWalk"), armUp = document.getElementById("armUp");
+var shownP = 0;
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function placeClimber(p, stage){
+  var q = pt(p), q2 = pt(Math.min(1, p+0.004)), q1 = pt(Math.max(0,p-0.004));
+  var dir = (q2.x - q1.x) >= 0 ? 1 : -1;
+  var sleeping = !!stage.sleep, top = !!stage.summit && p>=0.999;
+  climber.style.display = sleeping ? "none" : "";
+  zzz.style.display = sleeping ? "" : "none";
+  walker.setAttribute("transform","scale("+(top?1:dir)+" 1)");
+  climber.setAttribute("transform","translate("+q.x.toFixed(1)+" "+(q.y+1).toFixed(1)+") scale(1.7)");
+  armWalk.style.display = top ? "none" : ""; armUp.style.display = top ? "" : "none";
+  var legs = climber.querySelectorAll(".leg");
+  for (var i=0;i<legs.length;i++) legs[i].style.animationPlayState = top ? "paused" : "running";
+  trailDone.setAttribute("stroke-dashoffset", (L*(1-p)).toFixed(1));
+  flag.style.display = top ? "" : "none";
+}
+
+// ---------- panel ----------
+var $ = function(id){ return document.getElementById(id); };
+var viewing = null, lastIdx = -1;
+function store(k,v){ try{ if (v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
+var ICON_LOCK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7zm2 0h4V5a2 2 0 0 0-4 0z" fill="#A9C2B5"/></svg>';
+var ICON_OK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 11.5 3 8l1.4-1.4 2.1 2.1 5.1-5.1L13 5z" fill="#F6C453"/></svg>';
+var ICON_NOW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14 7 4l2.5 4 1.5-2 3 8z" fill="#13302A"/></svg>';
+function stopWhen(s){
+  var d = fmtDay(s.ts); return (d.charAt(0).toUpperCase()+d.slice(1)) + ", " + fmtTime(s.ts);
+}
+function renderStop(i, current){
+  var s = STAGES[i];
+  $("stopWhen").textContent = i===0 ? "Primera parada" : (current ? "Parada de ahora" : "Parada del " + stopWhen(s).toLowerCase());
+  $("stopTitle").textContent = s.title;
+  $("stopBody").textContent = s.body;
+  $("stopVerse").textContent = "«" + s.verse + "»";
+  $("stopRef").textContent = s.ref;
+  $("stopPrompt").textContent = s.prompt;
+  var note = $("note"); note.value = store("montana26-"+i) || ""; note.dataset.idx = i;
+  $("saved").textContent = "";
+  $("backNow").hidden = current;
+}
+function renderTrail(cur){
+  var ol = $("trailList"); ol.innerHTML = "";
+  STAGES.forEach(function(s,i){
+    var li = document.createElement("li");
+    var state = i<cur ? "done" : (i===cur ? "now" : "locked");
+    li.className = state + (viewing===i ? " viewing" : "");
+    var b = document.createElement("button"); b.type = "button";
+    var locked = state==="locked";
+    b.innerHTML = '<span class="dot">'+(locked?ICON_LOCK:(state==="now"?ICON_NOW:ICON_OK))+'</span><span><span class="t"></span><span class="h"></span></span>';
+    b.querySelector(".t").textContent = locked ? "Parada sorpresa" : s.title;
+    b.querySelector(".h").textContent = stopWhen(s) + (locked ? " Se abre a esa hora." : "");
+    if (locked) b.disabled = true;
+    else b.addEventListener("click", function(){ viewing = (i===cur ? null : i); renderStop(i, i===cur); renderTrail(cur); $("stop").scrollIntoView({behavior: reduce?"auto":"smooth", block:"start"}); });
+    li.appendChild(b); ol.appendChild(li);
+  });
+}
+function plural(n, a, b){ return n + " " + (n===1 ? a : b); }
+function renderCount(ts, cur){
+  var left = EVENT - ts;
+  if (left <= 0){
+    $("lead").textContent = "Llegamos a la cima";
+    $("count").innerHTML = "¡Te esperamos!";
+  } else {
+    var mins = Math.ceil(left/60000), h = Math.floor(mins/60), m = mins%60;
+    $("lead").textContent = "Faltan";
+    $("count").innerHTML = h>0 ? (h + ' <small>h</small> ' + m + ' <small>min</small>') : (m + ' <small>' + (m===1?'minuto':'minutos') + '</small>');
+  }
+  var nx = STAGES[cur+1];
+  $("next").textContent = nx ? ("Próxima parada: " + stopWhen(nx).toLowerCase().replace(/\.$/,"") + ". Vuelve a abrir el enlace a esa hora.") : "";
+}
+$("note").addEventListener("input", function(){
+  store("montana26-"+this.dataset.idx, this.value);
+  $("saved").textContent = "Guardado en tu mochila";
+});
+$("backNow").addEventListener("click", function(){ viewing = null; lastIdx = -1; tick(); });
+$("copy").addEventListener("click", function(){
+  var out = ["La Montaña 2026, mi mochila", ""];
+  STAGES.forEach(function(s,i){ var v = store("montana26-"+i); if (v && v.trim()) out.push(s.title + ":", v.trim(), ""); });
+  var text = out.length > 2 ? out.join("\n") : "";
+  var msg = $("saved");
+  if (!text){ msg.textContent = "Tu mochila está vacía. Escribe algo primero."; return; }
+  var done = function(){ msg.textContent = "Copiado. Puedes pegarlo en tus notas."; };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function(){ msg.textContent = "No se pudo copiar. Selecciona el texto y cópialo a mano."; });
+  else msg.textContent = "Tu navegador no permite copiar. Selecciona el texto y cópialo a mano.";
+});
+
+// ---------- loop ----------
+var intro = !reduce, introStart = performance.now(), INTRO_MS = 2600, celebrated = false;
+function tick(){
+  var ts = now(), cur = stageIndex(ts), stage = STAGES[cur], p = progress(ts);
+  paintSky(bogotaHour(ts));
+  var shown = p;
+  if (intro){
+    var f = Math.min(1, (performance.now()-introStart)/INTRO_MS);
+    var e = 1 - Math.pow(1-f, 3);
+    shown = p * e;
+    if (f >= 1) intro = false;
+  }
+  placeClimber(shown, intro ? STAGES[Math.max(0, stageIndex(STAGES[0].ts))] : stage);
+  if (intro && stage.sleep) { climber.style.display = ""; }
+  if (cur !== lastIdx){
+    lastIdx = cur;
+    cairnEls.forEach(function(g,i){ if (!g) return; g.setAttribute("opacity", i<=cur ? 1 : .45); g.firstChild.setAttribute("opacity", i===cur ? 1 : 0); });
+    if (viewing===null) renderStop(cur, true);
+    renderTrail(cur);
+  }
+  renderCount(ts, cur);
+  if (stage.summit && !intro && !celebrated){ celebrated = true; var t = $("toast"); t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); }, 3500); }
+  requestAnimationFrame(function(){ setTimeout(tick, intro ? 0 : (speed>1 ? 50 : 1000)); });
+}
+tick();
+
+// ---------- grain ----------
+(function(){
+  var c = $("grain"), x = c.getContext("2d"); c.width = 160; c.height = 160;
+  var img = x.createImageData(160,160);
+  for (var i=0;i<img.data.length;i+=4){ var v = Math.random()*255|0; img.data[i]=img.data[i+1]=img.data[i+2]=v; img.data[i+3]=255; }
+  x.putImageData(img,0,0);
+  c.style.background = "url(" + c.toDataURL() + ")"; c.width = 1; c.height = 1;
+})();
+
+// ---------- campfire sound (generated, no file) ----------
+var actx = null, master = null, crackleTimer = null;
+function startFire(){
+  var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+  actx = actx || new AC();
+  master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
+  master.gain.linearRampToValueAtTime(0.9, actx.currentTime + 1.2);
+  var len = actx.sampleRate*2, buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0), last = 0;
+  for (var i=0;i<len;i++){ var w = Math.random()*2-1; last = (last + 0.02*w)/1.02; d[i] = last*3.5; }
+  var src = actx.createBufferSource(); src.buffer = buf; src.loop = true;
+  var lp = actx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 500;
+  var g = actx.createGain(); g.gain.value = 0.35; src.connect(lp); lp.connect(g); g.connect(master); src.start();
+  master._src = src;
+  var cbuf = actx.createBuffer(1, actx.sampleRate*0.03, actx.sampleRate), cd = cbuf.getChannelData(0);
+  for (var k=0;k<cd.length;k++) cd[k] = (Math.random()*2-1) * Math.pow(1-k/cd.length, 4);
+  (function crackle(){
+    var n = actx.createBufferSource(); n.buffer = cbuf; n.playbackRate.value = 0.6 + Math.random()*1.6;
+    var hp = actx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 1200 + Math.random()*2500;
+    var cg = actx.createGain(); cg.gain.value = 0.15 + Math.random()*0.55;
+    n.connect(hp); hp.connect(cg); cg.connect(master); n.start();
+    crackleTimer = setTimeout(crackle, 40 + Math.random()*Math.random()*700);
+  })();
+  return true;
+}
+function stopFire(){
+  if (!master) return; clearTimeout(crackleTimer);
+  var m = master; m.gain.linearRampToValueAtTime(0, actx.currentTime + 0.6);
+  setTimeout(function(){ try{ m._src.stop(); m.disconnect(); }catch(e){} }, 700); master = null;
+}
+$("sound").addEventListener("click", function(){
+  var on = this.getAttribute("aria-pressed") === "true";
+  if (on){ stopFire(); this.setAttribute("aria-pressed","false"); $("soundLabel").textContent = "Oír la fogata"; }
+  else if (startFire()){ this.setAttribute("aria-pressed","true"); $("soundLabel").textContent = "Apagar sonido"; }
+});
+
+if (params.has("og")) document.body.classList.add("og");
+})();
+</script>
+</body>
+</html>
