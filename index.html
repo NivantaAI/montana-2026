@@ -117,6 +117,20 @@ body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-
 .where .big{font:400 22px/1.25 "Alfa Slab One",serif;color:var(--gold)}
 footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
 
+/* new stop banner */
+.newstop{position:absolute;left:16px;right:16px;bottom:16px;z-index:5;max-width:380px;margin:0 auto;text-align:center;
+  background:var(--gold);color:var(--pine);border-radius:18px;padding:16px 16px 14px;
+  box-shadow:0 0 0 0 rgba(246,196,83,.7),0 14px 40px rgba(0,0,0,.35);animation:popin .5s cubic-bezier(.2,.9,.3,1.3),halo 2s ease-out .5s infinite}
+@keyframes popin{from{transform:translateY(20px) scale(.92);opacity:0}to{transform:none;opacity:1}}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(246,196,83,.7),0 14px 40px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 16px rgba(246,196,83,0),0 14px 40px rgba(0,0,0,.35)}}
+.newstop .k{margin:0;font-weight:700;font-size:15px}
+.newstop .t{margin:2px 0 12px;font:400 26px/1.15 "Alfa Slab One",serif}
+.newstop .go{display:inline-flex;align-items:center;gap:8px;background:var(--pine);color:var(--gold);border:0;border-radius:999px;
+  padding:12px 20px;font:700 16px Figtree,sans-serif;cursor:pointer}
+.newstop .go svg{animation:nudge 1.3s ease-in-out infinite}
+.newstop .go:focus-visible{outline:3px solid var(--pine);outline-offset:3px}
+#stop.flash{outline:3px solid transparent;outline-offset:10px;border-radius:12px;animation:flash 1.1s ease-in-out 4}
+@keyframes flash{0%,100%{outline-color:transparent}50%{outline-color:rgba(246,196,83,.85)}}
 /* scroll cue */
 .cue{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px auto 0;background:none;border:0;color:var(--gold);
   padding:6px 14px;font:700 15px Figtree,sans-serif;cursor:pointer;white-space:nowrap;transition:opacity .35s}
@@ -124,7 +138,7 @@ footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
 @keyframes nudge{0%,100%{transform:translateY(-1px)}50%{transform:translateY(4px)}}
 .cue.gone{opacity:.35}
 .cue:focus-visible{outline:3px solid var(--snow);outline-offset:3px}
-body.og .cue{display:none}
+body.og .cue,body.og .newstop{display:none!important}
 /* heaven at the summit */
 #heaven{opacity:0;transition:opacity 3s ease}
 .heaven-on #heaven{opacity:1}
@@ -189,6 +203,7 @@ body.og .cue{display:none}
   .tools button{pointer-events:auto;flex:0 0 auto}
   .panel{grid-column:2;grid-row:1}
   .catch{bottom:72px}
+  .newstop{bottom:72px}
   .cue{position:fixed;right:235px;bottom:18px;margin:0;transform:translateX(50%);z-index:20;background:var(--gold);color:var(--pine);
     border-radius:999px;padding:11px 18px;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:opacity .35s,transform .35s}
   .cue.gone{opacity:0;pointer-events:none;transform:translate(50%,12px)}
@@ -358,6 +373,13 @@ body.og .title p{font-size:28px}
     <div class="title">
       <p class="group"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 12 Q8 9 17 2" stroke="#C9D7A0" stroke-width="1.4" fill="none"/><ellipse cx="6" cy="8" rx="3.2" ry="1.4" transform="rotate(-35 6 8)" fill="#B9CC85"/><ellipse cx="10" cy="7.5" rx="3.2" ry="1.4" transform="rotate(25 10 7.5)" fill="#9AAE6E"/><ellipse cx="13.5" cy="3.6" rx="3" ry="1.3" transform="rotate(-40 13.5 3.6)" fill="#B9CC85"/></svg>Grupo Olivera</p>
       <h1>La Montaña <span>2026</span></h1>
+    </div>
+    <div class="newstop" id="newstop" role="status" hidden>
+      <p class="k" id="newK">¡Se abrió una parada sorpresa!</p>
+      <p class="t" id="newTitle"></p>
+      <button class="go" id="newGo" type="button"><span id="newGoLabel">Ver la pregunta</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
     <div class="toast" id="toast" aria-hidden="true">¡Llegamos!</div>
     <div class="catch" id="catch" role="dialog" aria-labelledby="catchK" aria-live="polite">
@@ -639,7 +661,7 @@ function stopWhen(s){
 }
 function renderStop(i, current){
   var s = STAGES[i];
-  $("stopWhen").textContent = i===0 ? "Primera parada" : (current ? "Parada de ahora" : "Parada del " + stopWhen(s).toLowerCase());
+  $("stopWhen").textContent = i===0 ? "Primera parada" : (current ? (i > seenIdx() ? "¡Parada nueva!" : "Parada de ahora") : "Parada del " + stopWhen(s).toLowerCase());
   $("stopTitle").textContent = s.title;
   $("stopBody").textContent = s.body;
   $("stopVerse").textContent = "«" + s.verse + "»";
@@ -717,6 +739,39 @@ $("copy").addEventListener("click", function(){
   else msg.textContent = "Tu navegador no permite copiar. Selecciona el texto y cópialo a mano.";
 });
 
+// ---------- new stop announcement ----------
+var SEEN_KEY = "montana26-seen", announced = -1, pendingNew = -1;
+function seenIdx(){ var v = parseInt(store(SEEN_KEY), 10); return isNaN(v) ? 0 : v; }
+function stopVisible(){ var r = $("stop").getBoundingClientRect(); return r.top < window.innerHeight * 0.75 && r.bottom > 80; }
+function hideNew(){ $("newstop").hidden = true; }
+function markSeen(i){ if (i > seenIdx()) store(SEEN_KEY, String(i)); pendingNew = -1; hideNew(); }
+function flashStop(){ var st = $("stop"); st.classList.remove("flash"); void st.offsetWidth; st.classList.add("flash"); }
+function announce(i){
+  if (i === 0 || i <= seenIdx() || viewing !== null) return;
+  var s = STAGES[i];
+  pendingNew = i;
+  $("newK").textContent = s.summit ? "¡Llegamos a la cima!" : "¡Se abrió una parada sorpresa!";
+  $("newTitle").textContent = s.title;
+  $("newGoLabel").textContent = s.summit ? "Ver lo que traes" : (s.q ? "Ver la pregunta" : "Ver la parada");
+  var show = function(){
+    if (pendingNew !== i) return;
+    if (stopVisible()){ flashStop(); markSeen(i); return; }
+    $("newstop").hidden = false;
+  };
+  setTimeout(show, s.summit ? 4200 : 600);
+}
+$("newGo").addEventListener("click", function(){
+  var i = pendingNew; hideNew();
+  viewing = null; lastIdx = -1;
+  var beh = reduce ? "auto" : "smooth", panel = $("panel");
+  if (window.matchMedia("(min-width:980px)").matches) panel.scrollTo({top: $("stop").offsetTop - 24, behavior: beh});
+  else $("stop").scrollIntoView({behavior: beh, block: "start"});
+  setTimeout(function(){ flashStop(); if (i >= 0) markSeen(i); }, reduce ? 0 : 500);
+});
+function checkSeenOnScroll(){ if (pendingNew >= 0 && stopVisible()){ var i = pendingNew; flashStop(); markSeen(i); } }
+window.addEventListener("scroll", checkSeenOnScroll, {passive:true});
+$("panel").addEventListener("scroll", checkSeenOnScroll, {passive:true});
+
 // ---------- loop ----------
 var intro = !reduce, introStart = performance.now(), INTRO_MS = 2600, celebrated = false;
 function tick(){
@@ -739,6 +794,7 @@ function tick(){
   }
   renderCount(ts, cur);
   scene.classList.toggle("heaven-on", !!stage.summit && !intro);
+  if (!intro && announced !== cur){ announced = cur; announce(cur); }
   if (stage.summit && !intro && !celebrated){ celebrated = true; var t = $("toast"); t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); }, 3500); }
   requestAnimationFrame(function(){ setTimeout(tick, intro ? 0 : (speed>1 ? 50 : 1000)); });
 }
