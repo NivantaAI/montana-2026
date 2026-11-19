@@ -117,6 +117,14 @@ body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-
 .where .big{font:400 22px/1.25 "Alfa Slab One",serif;color:var(--gold)}
 footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
 
+/* scroll cue */
+.cue{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px auto 0;background:none;border:0;color:var(--gold);
+  padding:6px 14px;font:700 15px Figtree,sans-serif;cursor:pointer;white-space:nowrap;transition:opacity .35s}
+.cue svg{animation:nudge 1.3s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(-1px)}50%{transform:translateY(4px)}}
+.cue.gone{opacity:.35}
+.cue:focus-visible{outline:3px solid var(--snow);outline-offset:3px}
+body.og .cue{display:none}
 /* heaven at the summit */
 #heaven{opacity:0;transition:opacity 3s ease}
 .heaven-on #heaven{opacity:1}
@@ -181,6 +189,9 @@ footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
   .tools button{pointer-events:auto;flex:0 0 auto}
   .panel{grid-column:2;grid-row:1}
   .catch{bottom:72px}
+  .cue{position:fixed;right:235px;bottom:18px;margin:0;transform:translateX(50%);z-index:20;background:var(--gold);color:var(--pine);
+    border-radius:999px;padding:11px 18px;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:opacity .35s,transform .35s}
+  .cue.gone{opacity:0;pointer-events:none;transform:translate(50%,12px)}
   .panel{max-width:none;padding:40px 32px 48px;height:100vh;overflow:auto}
   .sign{margin-top:0}
 }
@@ -367,7 +378,11 @@ body.og .title p{font-size:28px}
     </button>
   </div>
 
-  <main class="panel">
+  <button class="cue" id="cue" type="button">Desliza para ver más
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <main class="panel" id="panel">
     <section class="sign" aria-live="polite">
       <p class="lead" id="lead">Faltan</p>
       <p class="count" id="count">-</p>
@@ -767,6 +782,25 @@ function stopFire(){
   var m = master; m.gain.linearRampToValueAtTime(0, actx.currentTime + 0.6);
   setTimeout(function(){ try{ m._src.stop(); m.disconnect(); }catch(e){} }, 700); master = null;
 }
+// ---------- scroll cue ----------
+(function(){
+  var cue = $("cue"), panel = $("panel");
+  var desk = window.matchMedia("(min-width:980px)");
+  function scroller(){ return desk.matches ? panel : null; }
+  function pos(){ var sc = scroller(); return sc ? sc.scrollTop : (window.scrollY || document.documentElement.scrollTop); }
+  function room(){ var sc = scroller(); return sc ? (sc.scrollHeight - sc.clientHeight) : (document.documentElement.scrollHeight - window.innerHeight); }
+  function update(){ cue.classList.toggle("gone", pos() > 120 || room() < 40); }
+  window.addEventListener("scroll", update, {passive:true});
+  panel.addEventListener("scroll", update, {passive:true});
+  window.addEventListener("resize", update);
+  cue.addEventListener("click", function(){
+    var sc = scroller(), beh = reduce ? "auto" : "smooth";
+    if (sc) sc.scrollBy({top: sc.clientHeight * 0.75, behavior: beh});
+    else $("stop").scrollIntoView({behavior: beh, block: "start"});
+  });
+  setTimeout(update, 300);
+})();
+
 // ---------- fishing: catch a promise ----------
 var PROMISES = [
   ["Echen la red a la derecha de la barca, y encontrarán.","Juan 21:6"],
