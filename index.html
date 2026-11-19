@@ -67,6 +67,13 @@ body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-
 .verse cite{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:14px;color:var(--gold)}
 .prompt{margin:0 0 1.2em;font-weight:600;color:var(--snow)}
 .backpack{background:var(--pine-2);border-radius:14px;padding:14px;border:1.5px dashed rgba(246,196,83,.35)}
+.backpack .q{margin:4px 0 8px;font-weight:700;font-size:19px;line-height:1.35;color:var(--gold)}
+.packed{display:grid;gap:12px;margin:6px 0 4px}
+.packed .pq{margin:0;font-weight:700;color:var(--gold);font-size:15px}
+.packed .pa{margin:2px 0 0;white-space:pre-wrap}
+.packed .empty{margin:0;color:var(--muted)}
+[hidden]{display:none!important}
+.soon{margin:0;padding:12px 14px;border-radius:12px;background:var(--pine-2);color:var(--text);font-size:15px}
 .backpack label{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:4px}
 .backpack .help{margin:0 0 10px;color:var(--muted);font-size:14px}
 .backpack textarea{width:100%;min-height:96px;resize:vertical;border-radius:10px;border:1.5px solid #3c6b58;background:#0F2822;color:var(--text);
@@ -364,12 +371,15 @@ body.og .title p{font-size:28px}
       <p class="body" id="stopBody"></p>
       <blockquote class="verse"><span id="stopVerse"></span><cite id="stopRef"></cite></blockquote>
       <p class="prompt" id="stopPrompt"></p>
-      <div class="backpack">
-        <label for="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V5a4 4 0 0 1 8 0v1h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm2 0h4V5a2 2 0 0 0-4 0zM8 13h8v2H8z" fill="#F6C453"/></svg>Mis apuntes para el viernes</label>
-        <p class="help" id="note-help">Escribe tu respuesta para llegar a la reunión con ella pensada. Solo tú la ves: se guarda en este celular.</p>
+      <div class="backpack" id="backpack">
+        <label for="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V5a4 4 0 0 1 8 0v1h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm2 0h4V5a2 2 0 0 0-4 0zM8 13h8v2H8z" fill="#F6C453"/></svg>Mi mochila</label>
+        <p class="q" id="stopQ"></p>
+        <p class="help" id="note-help">Guarda aquí tu respuesta y tráela pensada el viernes. Solo tú la ves: se queda en este celular.</p>
+        <div class="packed" id="packed" hidden></div>
         <textarea id="note" aria-describedby="note-help" placeholder="Escribe aquí tu respuesta..."></textarea>
-        <div class="row"><span class="saved" id="saved"></span><button class="btn" id="copy" type="button">Copiar mis apuntes</button></div>
+        <div class="row"><span class="saved" id="saved"></span><button class="btn" id="copy" type="button">Copiar mi mochila</button></div>
       </div>
+      <p class="soon" id="soon" hidden></p>
       <button class="btn back" id="backNow" type="button" hidden>Volver a la parada de ahora</button>
       <p class="next" id="next"></p>
     </article>
@@ -409,33 +419,39 @@ var STAGES = [
    verse:"El Señor es mi fortaleza; él me da pies como de cierva y me hace caminar por las alturas.", ref:"Habacuc 3:19",
    prompt:"Mientras subimos, pídele al Espíritu Santo que te recuerde el camino que recorriste este año."},
   {t:"2026-11-19T19:00:00", wp:0.14, title:"Las piedras del camino",
-   body:"¿Qué fue lo más difícil de tu 2026? En tu vida, en tu familia, en tu trabajo. No hace falta contarlo: basta con verlo.",
+   body:"En toda subida hay piedras. Algunas nos hicieron tropezar; otras nos enseñaron a pisar firme.",
+   q:"¿Qué fue lo más difícil de tu 2026, en tu vida, tu familia o tu trabajo?",
    verse:"Cuando pases por las aguas, yo estaré contigo.", ref:"Isaías 43:2",
    prompt:"Pídele al Espíritu Santo que te muestre esa piedra, y cómo pasaste por encima de ella."},
   {t:"2026-11-19T22:00:00", wp:0.30, sleep:true, title:"La carpa",
    body:"Hasta el escalador descansa. Esta noche no hay que subir más: la montaña sigue ahí mañana.",
    verse:"En paz me acostaré y asimismo dormiré, porque solo tú, Señor, me haces vivir confiado.", ref:"Salmo 4:8",
-   prompt:"Antes de dormir, dale gracias a Dios por un día de este año que no quieres olvidar."},
+   q:"¿Qué día de este año no quieres olvidar?",
+   prompt:"Antes de dormir, dale gracias a Dios por ese día."},
   {t:"2026-11-20T06:00:00", wp:0.30, title:"Amanecer",
    body:"Sale el sol sobre la montaña y el escalador vuelve a ponerse las botas. Cada día del 2026 tuvo su propia mañana.",
    verse:"Nuevas son cada mañana sus misericordias; grande es tu fidelidad.", ref:"Lamentaciones 3:23",
-   prompt:"¿En qué momento de este año Dios te dio un nuevo comienzo?"},
+   q:"¿En qué momento de este año Dios te dio un nuevo comienzo?",
+   prompt:"Pídele al Espíritu Santo que te lo recuerde con detalle."},
   {t:"2026-11-20T10:00:00", wp:0.48, title:"La cuerda",
-   body:"Nadie sube solo. ¿Quién te sostuvo este año? Tu pareja, tus hijos, un amigo, el grupo.",
+   body:"Nadie sube solo. A veces fue tu pareja, tus hijos, un amigo o el grupo quien sostuvo la cuerda.",
+   q:"¿Quién te sostuvo este año?",
    verse:"Cordón de tres dobleces no se rompe pronto.", ref:"Eclesiastés 4:12",
-   prompt:"Escribe sus nombres en tus apuntes y, si puedes, díselo hoy."},
+   prompt:"Escribe sus nombres y, si puedes, díselo hoy."},
   {t:"2026-11-20T13:00:00", wp:0.66, title:"El mirador",
-   body:"Desde aquí se ve todo lo que ya subiste. ¿Qué victorias te dio Dios en 2026? En tu vida, tu familia, tu trabajo.",
+   body:"Desde aquí se ve todo lo que ya subiste.",
+   q:"¿Qué victorias te dio Dios en 2026, en tu vida, tu familia y tu trabajo?",
    verse:"Hasta aquí nos ayudó el Señor.", ref:"1 Samuel 7:12",
-   prompt:"Samuel puso una piedra para no olvidar. ¿Cuál sería la tuya?"},
+   prompt:"Samuel puso una piedra para no olvidar lo que Dios hizo. Esa victoria es tu piedra."},
   {t:"2026-11-20T16:00:00", wp:0.84, title:"Casi arriba",
    body:"Ya se ve la cima. Alista los masmelos y la ropa de pesca: en un par de horas llegamos juntos.",
    verse:"Alzaré mis ojos a los montes. ¿De dónde vendrá mi socorro? Mi socorro viene del Señor.", ref:"Salmo 121:1-2",
-   prompt:"¿Qué montaña quieres subir con Dios en 2027?"},
+   q:"¿Qué montaña quieres subir con Dios en 2027?",
+   prompt:"Pídele al Espíritu Santo que te muestre el camino."},
   {t:"2026-11-20T18:00:00", wp:1.00, summit:true, title:"La cima",
    body:"¡Llegamos! Como la paloma que volvió con la hoja de olivo, hoy sabemos que la tormenta pasó. Te esperamos alrededor del fuego, con la montaña, los masmelos y la caña de pescar.",
    verse:"La paloma volvió a él al caer la tarde, y traía en el pico una hoja de olivo.", ref:"Génesis 8:11",
-   prompt:"Trae lo que escribiste en tus apuntes. Hoy lo ponemos en la montaña."}
+   prompt:"Trae tu mochila. Hoy ponemos todo en la montaña."}
 ];
 STAGES.forEach(function(s,i){ s.ts = Date.parse(s.t + TZ); s.i = i; });
 var EVENT = STAGES[STAGES.length-1].ts;
@@ -607,6 +623,28 @@ function renderStop(i, current){
   $("stopPrompt").textContent = s.prompt;
   var note = $("note"); note.value = store("montana26-"+i) || ""; note.dataset.idx = i;
   $("saved").textContent = "";
+  var bp = $("backpack"), packed = $("packed"), soon = $("soon");
+  if (s.q){
+    bp.hidden = false; soon.hidden = true; packed.hidden = true; note.hidden = false;
+    $("stopQ").textContent = s.q; $("stopQ").hidden = false; $("note-help").hidden = false;
+  } else if (s.summit){
+    bp.hidden = false; soon.hidden = true; note.hidden = true; $("note-help").hidden = true;
+    $("stopQ").textContent = "Esto es lo que traes en tu mochila:"; packed.hidden = false; packed.innerHTML = "";
+    var any = false;
+    STAGES.forEach(function(st,k){
+      var v = st.q && store("montana26-"+k);
+      if (!v || !v.trim()) return; any = true;
+      var a = document.createElement("p"); a.className = "pq"; a.textContent = st.q;
+      var b = document.createElement("p"); b.className = "pa"; b.textContent = v.trim();
+      var d = document.createElement("div"); d.appendChild(a); d.appendChild(b); packed.appendChild(d);
+    });
+    if (!any){ var e = document.createElement("p"); e.className = "empty"; e.textContent = "Tu mochila está vacía, pero igual te esperamos. En «El camino» puedes abrir las paradas y responder."; packed.appendChild(e); }
+  } else {
+    bp.hidden = true;
+    var nq = STAGES.filter(function(st){ return st.q && st.ts > s.ts; })[0];
+    soon.hidden = !nq;
+    if (nq) soon.textContent = "La primera pregunta llega el " + stopWhen(nq).toLowerCase() + " Ahí abrirás tu mochila para responderla.";
+  }
   $("backNow").hidden = current;
 }
 function renderTrail(cur){
@@ -645,11 +683,11 @@ $("note").addEventListener("input", function(){
 });
 $("backNow").addEventListener("click", function(){ viewing = null; lastIdx = -1; tick(); });
 $("copy").addEventListener("click", function(){
-  var out = ["La Montaña 2026, mis apuntes", ""];
-  STAGES.forEach(function(s,i){ var v = store("montana26-"+i); if (v && v.trim()) out.push(s.title + ":", v.trim(), ""); });
+  var out = ["La Montaña 2026, mi mochila", ""];
+  STAGES.forEach(function(s,i){ var v = s.q && store("montana26-"+i); if (v && v.trim()) out.push(s.q, v.trim(), ""); });
   var text = out.length > 2 ? out.join("\n") : "";
   var msg = $("saved");
-  if (!text){ msg.textContent = "Aún no has escrito nada."; return; }
+  if (!text){ msg.textContent = "Tu mochila está vacía."; return; }
   var done = function(){ msg.textContent = "Copiado. Puedes pegarlo en tus notas."; };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function(){ msg.textContent = "No se pudo copiar. Selecciona el texto y cópialo a mano."; });
   else msg.textContent = "Tu navegador no permite copiar. Selecciona el texto y cópialo a mano.";
