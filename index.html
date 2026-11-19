@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>La Montaña 2026</title>
+<title>La Montaña 2026 | Grupo Olivera</title>
 <meta name="description" content="Última reunión del año. Sube con nosotros la montaña del 2026: el viernes 20 de noviembre a las 6:00 p. m. llegamos juntos a la cima.">
-<meta property="og:title" content="La Montaña 2026">
+<meta property="og:title" content="La Montaña 2026 | Grupo Olivera">
 <meta property="og:description" content="El viernes a las 6:00 p. m. llegamos juntos a la cima. Abre el enlace: el escalador sube hora tras hora.">
 <meta property="og:image" content="https://nivantaai.github.io/montana-2026/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -37,6 +37,7 @@ body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-
 .title h1{font:400 clamp(40px,11vw,76px)/.92 "Alfa Slab One",serif;margin:0;color:var(--snow);letter-spacing:.01em;
   text-shadow:0 3px 0 var(--rock-shade),0 8px 24px rgba(10,20,40,.35)}
 .title h1 span{display:block;font-size:.62em;color:var(--gold);text-shadow:0 3px 0 var(--wood-dark)}
+.title .group{margin:0 0 .35em;display:flex;justify-content:center;align-items:center;gap:6px;font-weight:700;font-size:16px;color:#E4EDC8}
 .title p{margin:.55em 0 0;font-weight:600;font-size:15px;color:var(--snow);opacity:.92;text-shadow:0 1px 6px rgba(0,0,0,.5)}
 .sound{position:absolute;right:12px;bottom:14px;z-index:3;display:flex;align-items:center;gap:8px;
   background:rgba(19,48,42,.78);color:var(--text);border:1.5px solid rgba(246,196,83,.55);border-radius:999px;
@@ -107,6 +108,34 @@ body{background:var(--pine);color:var(--text);font:400 17px/1.55 Figtree,system-
 .where .big{font:400 22px/1.25 "Alfa Slab One",serif;color:var(--gold)}
 footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
 
+/* heaven at the summit */
+#heaven{opacity:0;transition:opacity 3s ease}
+.heaven-on #heaven{opacity:1}
+.rays{animation:rays 5s ease-in-out infinite alternate}
+@keyframes rays{from{opacity:.55}to{opacity:1}}
+.dove-in{transform:translateY(-300px);transition:transform 5s cubic-bezier(.2,.7,.25,1) .6s}
+.heaven-on .dove-in{transform:none}
+.wing{transform-box:fill-box;transform-origin:50% 100%;animation:flap .45s ease-in-out infinite alternate}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(-.55)}}
+/* fishing */
+.fishbtn{position:absolute;left:12px;bottom:14px;z-index:3;display:flex;align-items:center;gap:8px;
+  background:rgba(19,48,42,.78);color:var(--text);border:1.5px solid rgba(159,214,219,.6);border-radius:999px;
+  padding:9px 14px;font:600 14px Figtree,sans-serif;cursor:pointer;backdrop-filter:blur(6px)}
+.fishbtn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.fishbtn[disabled]{opacity:.6;cursor:default}
+#lakehit{cursor:pointer}
+.catch{position:absolute;left:16px;right:16px;bottom:66px;z-index:4;max-width:380px;margin:0 auto;
+  background:rgba(15,40,34,.94);border:2px solid var(--gold);border-radius:16px;padding:16px 16px 14px;
+  box-shadow:0 14px 40px rgba(0,0,0,.35);transform:translateY(12px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s}
+.catch.show{opacity:1;transform:none;pointer-events:auto}
+.catch .k{margin:0 0 4px;font-weight:700;color:#9FD6DB;font-size:14px}
+.catch .v{margin:0;font-size:18px;line-height:1.45;color:#F7F0DC}
+.catch cite{display:block;margin-top:6px;font-style:normal;font-weight:700;font-size:14px;color:var(--gold)}
+.catch .row{margin-top:12px}
+.bob.biting{animation:bite .25s ease-in-out 4 alternate}
+@keyframes bite{from{transform:translateY(0)}to{transform:translateY(5px)}}
+.fish.now{animation:jump1 1.1s ease-out 1}
+@keyframes jump1{0%{opacity:0;transform:translate(0,0) rotate(0)}20%{opacity:1;transform:translate(8px,-16px) rotate(-30deg)}50%{opacity:1;transform:translate(18px,-22px) rotate(10deg)}100%{opacity:0;transform:translate(28px,-2px) rotate(50deg)}}
 /* scene animation */
 .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.1s ease-in-out infinite alternate}
 .flame.f2{animation-duration:.8s;animation-delay:-.3s}
@@ -145,11 +174,12 @@ footer{margin-top:44px;color:var(--muted);font-size:13px;text-align:center}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
-body.og .panel,body.og .sound{display:none}
+body.og .panel,body.og .sound,body.og .fishbtn{display:none}
 body.og .app{display:block}
 body.og .scene{height:100vh;max-height:none}
 body.og .title{text-align:left;left:70px;right:auto;top:150px;width:520px}
 body.og .title h1{font-size:100px}
+body.og .title .group{justify-content:flex-start;font-size:26px}
 body.og .title p{font-size:28px}
 </style>
 </head>
@@ -172,6 +202,16 @@ body.og .title p{font-size:28px}
           <stop offset="0" stop-color="#FFF3C4" stop-opacity=".9"/>
           <stop offset="1" stop-color="#FFF3C4" stop-opacity="0"/>
         </radialGradient>
+        <radialGradient id="heavenglow">
+          <stop offset="0" stop-color="#FFF8DF" stop-opacity=".95"/>
+          <stop offset=".35" stop-color="#FFE7A3" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#FFE7A3" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="rayg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FFF6D8" stop-opacity="0"/>
+          <stop offset=".6" stop-color="#FFF6D8" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#FFF6D8" stop-opacity=".05"/>
+        </linearGradient>
         <linearGradient id="lakeg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="#3C97A1"/><stop offset="1" stop-color="#22626B"/>
         </linearGradient>
@@ -197,6 +237,7 @@ body.og .title p{font-size:28px}
       <path d="M210 128 L176 214 L190 206 L200 222 L214 204 L228 220 L240 200 L250 210 Z" fill="var(--snow)"/>
       <path d="M210 128 L250 210 L240 200 L228 220 L222 196 Z" fill="#D7D9E3"/>
 
+      <g id="olives"></g>
       <!-- trail -->
       <path id="trail" d="M205 612 L285 540 L150 470 L265 395 L172 320 L245 252 L200 196 L210 138" fill="none" stroke="#E8DCC6" stroke-opacity=".55" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" stroke-linejoin="round"/>
       <path id="trailDone" d="M205 612 L285 540 L150 470 L265 395 L172 320 L245 252 L200 196 L210 138" fill="none" stroke="var(--gold)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -228,7 +269,8 @@ body.og .title p{font-size:28px}
       <g class="fish" transform="translate(52 664)"><path d="M0 0 q6 -5 12 0 q-6 5 -12 0z M12 0 l5 -4 v8z" fill="var(--ember)"/></g>
       <line x1="150" y1="676" x2="100" y2="626" stroke="#5A3720" stroke-width="2.5" stroke-linecap="round"/>
       <path d="M100 626 Q90 640 92 662" fill="none" stroke="#E8DCC6" stroke-width=".8"/>
-      <g class="bob"><circle cx="92" cy="662" r="2.6" fill="#E8443A"/></g>
+      <g class="bob" id="bobber"><circle cx="92" cy="662" r="2.6" fill="#E8443A"/></g>
+      <ellipse id="lakehit" cx="80" cy="660" rx="90" ry="30" fill="transparent"/>
 
       <!-- base camp -->
       <g transform="translate(318 662)">
@@ -248,6 +290,32 @@ body.og .title p{font-size:28px}
         <g id="embers"></g>
       </g>
 
+      <!-- heaven: only at the summit -->
+      <g id="heaven" aria-hidden="true">
+        <g class="rays">
+          <path d="M150 -420 L196 150 L224 150 L270 -420Z" fill="url(#rayg)"/>
+          <path d="M60 -420 L188 150 L204 150 L120 -420Z" fill="url(#rayg)" opacity=".7"/>
+          <path d="M300 -420 L216 150 L232 150 L360 -420Z" fill="url(#rayg)" opacity=".7"/>
+          <path d="M-60 -400 L184 160 L194 160 L0 -420Z" fill="url(#rayg)" opacity=".45"/>
+          <path d="M420 -420 L226 160 L236 160 L480 -400Z" fill="url(#rayg)" opacity=".45"/>
+        </g>
+        <circle cx="210" cy="140" r="120" fill="url(#heavenglow)"/>
+        <path d="M210 128 L176 214 L190 206 L200 222 L214 204 L228 220 L240 200 L250 210 Z" fill="#FFE9A8" opacity=".55"/>
+        <g transform="translate(266 92)">
+          <g class="dove-in"><g class="bob">
+            <path class="wing" d="M-2 -1 Q-10 -16 -20 -14 Q-12 -8 -6 1Z" fill="#fff"/>
+            <ellipse cx="0" cy="0" rx="10" ry="5" fill="#fff"/>
+            <path d="M-9 0 L-17 -3 L-16 4Z" fill="#F1EFE8"/>
+            <circle cx="9" cy="-3" r="3.6" fill="#fff"/>
+            <path d="M12 -3 L16 -2 L12 -1Z" fill="#F6C453"/>
+            <path d="M15 -2 Q20 1 24 0" stroke="#6B7F4A" stroke-width="1" fill="none"/>
+            <ellipse cx="19" cy="-1.5" rx="2.6" ry="1.1" transform="rotate(-25 19 -1.5)" fill="#8FA65C"/>
+            <ellipse cx="22.5" cy="1.6" rx="2.6" ry="1.1" transform="rotate(30 22.5 1.6)" fill="#A9BD72"/>
+            <path class="wing" d="M2 -1 Q-2 -18 -12 -19 Q-6 -10 -2 1Z" fill="#F4F4F0"/>
+          </g></g>
+        </g>
+      </g>
+
       <!-- climber -->
       <g id="climber">
         <g id="walker">
@@ -264,10 +332,19 @@ body.og .title p{font-size:28px}
     </svg>
     <canvas class="grain" id="grain" aria-hidden="true"></canvas>
     <div class="title">
+      <p class="group"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 12 Q8 9 17 2" stroke="#C9D7A0" stroke-width="1.4" fill="none"/><ellipse cx="6" cy="8" rx="3.2" ry="1.4" transform="rotate(-35 6 8)" fill="#B9CC85"/><ellipse cx="10" cy="7.5" rx="3.2" ry="1.4" transform="rotate(25 10 7.5)" fill="#9AAE6E"/><ellipse cx="13.5" cy="3.6" rx="3" ry="1.3" transform="rotate(-40 13.5 3.6)" fill="#B9CC85"/></svg>Grupo Olivera</p>
       <h1>La Montaña <span>2026</span></h1>
-      <p>Última reunión del año</p>
     </div>
     <div class="toast" id="toast" aria-hidden="true">¡Llegamos!</div>
+    <button class="fishbtn" id="fishbtn" type="button">
+      <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 7 q7 -7 13 0 q-6 7 -13 0z M14 7 l4 -4 v8z" fill="#F07A2B"/></svg>
+      Pesca una promesa
+    </button>
+    <div class="catch" id="catch" role="dialog" aria-labelledby="catchK" aria-live="polite">
+      <p class="k" id="catchK">¡Pescaste una promesa!</p>
+      <p class="v" id="catchV"></p><cite id="catchR"></cite>
+      <div class="row"><button class="btn" id="catchAgain" type="button">Pescar otra</button><button class="btn" id="catchClose" type="button">Cerrar</button></div>
+    </div>
     <button class="sound" id="sound" aria-pressed="false" type="button">
       <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-4 0-7z" fill="currentColor"/></svg>
       <span id="soundLabel">Oír la fogata</span>
@@ -278,7 +355,7 @@ body.og .title p{font-size:28px}
     <section class="sign" aria-live="polite">
       <p class="lead" id="lead">Faltan</p>
       <p class="count" id="count">-</p>
-      <p class="date">Viernes 20 de noviembre, 6:00 p. m.</p>
+      <p class="date">Última reunión del año: viernes 20 de noviembre, 6:00&nbsp;p.&nbsp;m.</p>
     </section>
 
     <article class="stop" id="stop">
@@ -288,10 +365,10 @@ body.og .title p{font-size:28px}
       <blockquote class="verse"><span id="stopVerse"></span><cite id="stopRef"></cite></blockquote>
       <p class="prompt" id="stopPrompt"></p>
       <div class="backpack">
-        <label for="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V5a4 4 0 0 1 8 0v1h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm2 0h4V5a2 2 0 0 0-4 0zM8 13h8v2H8z" fill="#F6C453"/></svg>Mi mochila</label>
-        <p class="help" id="note-help">Lo que escribas se queda solo en este celular. Nadie más lo ve.</p>
-        <textarea id="note" aria-describedby="note-help" placeholder="Escribe aquí lo que te viene al corazón..."></textarea>
-        <div class="row"><span class="saved" id="saved"></span><button class="btn" id="copy" type="button">Copiar mi mochila</button></div>
+        <label for="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V5a4 4 0 0 1 8 0v1h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm2 0h4V5a2 2 0 0 0-4 0zM8 13h8v2H8z" fill="#F6C453"/></svg>Mis apuntes para el viernes</label>
+        <p class="help" id="note-help">Escribe tu respuesta para llegar a la reunión con ella pensada. Solo tú la ves: se guarda en este celular.</p>
+        <textarea id="note" aria-describedby="note-help" placeholder="Escribe aquí tu respuesta..."></textarea>
+        <div class="row"><span class="saved" id="saved"></span><button class="btn" id="copy" type="button">Copiar mis apuntes</button></div>
       </div>
       <button class="btn back" id="backNow" type="button" hidden>Volver a la parada de ahora</button>
       <p class="next" id="next"></p>
@@ -318,7 +395,7 @@ body.og .title p{font-size:28px}
       <p><a class="btn maps" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia%20El%20Lugar%20de%20Su%20Presencia%20La%20Castellana%20Bogot%C3%A1" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
     </section>
 
-    <footer>El escalador sube con el paso de las horas. Vuelve a abrir este enlace para ver dónde va.</footer>
+    <footer>Grupo Olivera, noviembre de 2026.<br>El escalador sube con el paso de las horas. Vuelve a abrir este enlace para ver dónde va.</footer>
   </main>
 </div>
 
@@ -346,7 +423,7 @@ var STAGES = [
   {t:"2026-11-20T10:00:00", wp:0.48, title:"La cuerda",
    body:"Nadie sube solo. ¿Quién te sostuvo este año? Tu pareja, tus hijos, un amigo, el grupo.",
    verse:"Cordón de tres dobleces no se rompe pronto.", ref:"Eclesiastés 4:12",
-   prompt:"Escribe sus nombres en tu mochila y, si puedes, díselo hoy."},
+   prompt:"Escribe sus nombres en tus apuntes y, si puedes, díselo hoy."},
   {t:"2026-11-20T13:00:00", wp:0.66, title:"El mirador",
    body:"Desde aquí se ve todo lo que ya subiste. ¿Qué victorias te dio Dios en 2026? En tu vida, tu familia, tu trabajo.",
    verse:"Hasta aquí nos ayudó el Señor.", ref:"1 Samuel 7:12",
@@ -356,9 +433,9 @@ var STAGES = [
    verse:"Alzaré mis ojos a los montes. ¿De dónde vendrá mi socorro? Mi socorro viene del Señor.", ref:"Salmo 121:1-2",
    prompt:"¿Qué montaña quieres subir con Dios en 2027?"},
   {t:"2026-11-20T18:00:00", wp:1.00, summit:true, title:"La cima",
-   body:"¡Llegamos! Te esperamos alrededor del fuego, con la montaña, los masmelos y la caña de pescar.",
-   verse:"Grandes cosas ha hecho el Señor con nosotros; estaremos alegres.", ref:"Salmo 126:3",
-   prompt:"Trae lo que guardaste en tu mochila. Hoy lo ponemos en la montaña."}
+   body:"¡Llegamos! Como la paloma que volvió con la hoja de olivo, hoy sabemos que la tormenta pasó. Te esperamos alrededor del fuego, con la montaña, los masmelos y la caña de pescar.",
+   verse:"La paloma volvió a él al caer la tarde, y traía en el pico una hoja de olivo.", ref:"Génesis 8:11",
+   prompt:"Trae lo que escribiste en tus apuntes. Hoy lo ponemos en la montaña."}
 ];
 STAGES.forEach(function(s,i){ s.ts = Date.parse(s.t + TZ); s.i = i; });
 var EVENT = STAGES[STAGES.length-1].ts;
@@ -400,7 +477,7 @@ if (OG) document.body.classList.add("og");
 function fit(){
   var w = scene.clientWidth, h = scene.clientHeight, a = w/h, W, H;
   if (OG){ H = 640; W = H*a; svg.setAttribute("viewBox", (200 - W*0.66) + " 76 " + W + " " + H); return; }
-  if (a < 400/760){ W = 400; H = W/a; } else { H = 760; W = H*a; }
+  if (a < 400/830){ W = 400; H = W/a; } else { H = 830; W = H*a; }
   svg.setAttribute("viewBox", (200 - W/2) + " " + (712 - H) + " " + W + " " + H);
 }
 fit(); window.addEventListener("resize", fit);
@@ -423,6 +500,14 @@ for (var j=0;j<7;j++){
   e.style.animationDelay = (-j*0.45)+"s"; e.style.setProperty("--dx", ((rnd()-.5)*24).toFixed(1)+"px");
 }
 
+var olivesG = document.getElementById("olives");
+[[30,598,1],[95,566,.8],[372,578,.9],[440,612,1.1],[-70,618,1.2],[500,630,1]].forEach(function(o){
+  var g = el("g",{transform:"translate("+o[0]+" "+o[1]+") scale("+o[2]+")"}, olivesG);
+  el("path",{d:"M-1 0 Q-3 -8 1 -13 Q4 -17 2 -22 M1 -13 Q6 -15 8 -19",stroke:"#5A4630","stroke-width":2.4,fill:"none","stroke-linecap":"round"}, g);
+  el("ellipse",{cx:-5,cy:-22,rx:9,ry:6,fill:"#6E8250"}, g);
+  el("ellipse",{cx:6,cy:-24,rx:9,ry:6.5,fill:"#8A9C63"}, g);
+  el("ellipse",{cx:0,cy:-29,rx:8,ry:5.5,fill:"#A3B47A"}, g);
+});
 var trail = document.getElementById("trail"), trailDone = document.getElementById("trailDone");
 var L = trail.getTotalLength();
 trailDone.setAttribute("stroke-dasharray", L);
@@ -556,15 +641,15 @@ function renderCount(ts, cur){
 }
 $("note").addEventListener("input", function(){
   store("montana26-"+this.dataset.idx, this.value);
-  $("saved").textContent = "Guardado en tu mochila";
+  $("saved").textContent = "Guardado";
 });
 $("backNow").addEventListener("click", function(){ viewing = null; lastIdx = -1; tick(); });
 $("copy").addEventListener("click", function(){
-  var out = ["La Montaña 2026, mi mochila", ""];
+  var out = ["La Montaña 2026, mis apuntes", ""];
   STAGES.forEach(function(s,i){ var v = store("montana26-"+i); if (v && v.trim()) out.push(s.title + ":", v.trim(), ""); });
   var text = out.length > 2 ? out.join("\n") : "";
   var msg = $("saved");
-  if (!text){ msg.textContent = "Tu mochila está vacía. Escribe algo primero."; return; }
+  if (!text){ msg.textContent = "Aún no has escrito nada."; return; }
   var done = function(){ msg.textContent = "Copiado. Puedes pegarlo en tus notas."; };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function(){ msg.textContent = "No se pudo copiar. Selecciona el texto y cópialo a mano."; });
   else msg.textContent = "Tu navegador no permite copiar. Selecciona el texto y cópialo a mano.";
@@ -591,6 +676,7 @@ function tick(){
     renderTrail(cur);
   }
   renderCount(ts, cur);
+  scene.classList.toggle("heaven-on", !!stage.summit && !intro);
   if (stage.summit && !intro && !celebrated){ celebrated = true; var t = $("toast"); t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); }, 3500); }
   requestAnimationFrame(function(){ setTimeout(tick, intro ? 0 : (speed>1 ? 50 : 1000)); });
 }
@@ -634,9 +720,46 @@ function stopFire(){
   var m = master; m.gain.linearRampToValueAtTime(0, actx.currentTime + 0.6);
   setTimeout(function(){ try{ m._src.stop(); m.disconnect(); }catch(e){} }, 700); master = null;
 }
+// ---------- fishing: catch a promise ----------
+var PROMISES = [
+  ["Echen la red a la derecha de la barca, y encontrarán.","Juan 21:6"],
+  ["Pero yo estoy como olivo verde en la casa de Dios; en su misericordia confío para siempre.","Salmo 52:8"],
+  ["Yo estoy con ustedes todos los días, hasta el fin del mundo.","Mateo 28:20"],
+  ["La paz les dejo, mi paz les doy. No se angustien ni tengan miedo.","Juan 14:27"],
+  ["El que comenzó en ustedes la buena obra, la perfeccionará.","Filipenses 1:6"],
+  ["Yo sé los planes que tengo para ustedes: planes de bienestar, para darles un futuro y una esperanza.","Jeremías 29:11"],
+  ["Los que esperan en el Señor tendrán nuevas fuerzas; levantarán alas como las águilas.","Isaías 40:31"],
+  ["Busquen primero el reino de Dios y su justicia, y todas estas cosas les serán añadidas.","Mateo 6:33"],
+  ["Yo soy la vid y ustedes las ramas. El que permanece en mí da mucho fruto.","Juan 15:5"],
+  ["Sé fuerte y valiente, porque el Señor tu Dios estará contigo dondequiera que vayas.","Josué 1:9"],
+  ["Vengan, síganme, y los haré pescadores de hombres.","Mateo 4:19"],
+  ["Todo lo puedo en Cristo que me fortalece.","Filipenses 4:13"]
+];
+var pool = [], fishing = false;
+function nextPromise(){
+  if (!pool.length){ pool = PROMISES.map(function(_,i){return i;}); for (var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; } }
+  return PROMISES[pool.pop()];
+}
+function castLine(){
+  if (fishing) return; fishing = true; $("fishbtn").disabled = true;
+  var card = $("catch"); card.classList.remove("show");
+  var bob = $("bobber"), fish = document.querySelector(".fish");
+  bob.classList.remove("biting"); void bob.getBBox(); bob.classList.add("biting");
+  setTimeout(function(){ fish.classList.remove("now"); void fish.getBBox(); fish.classList.add("now"); }, reduce ? 0 : 900);
+  setTimeout(function(){
+    var pr = nextPromise(); $("catchV").textContent = "\u00ab" + pr[0] + "\u00bb"; $("catchR").textContent = pr[1];
+    card.classList.add("show"); fishing = false; $("fishbtn").disabled = false; bob.classList.remove("biting");
+    $("catchAgain").focus({preventScroll:true});
+  }, reduce ? 50 : 1700);
+}
+$("fishbtn").addEventListener("click", castLine);
+document.getElementById("lakehit").addEventListener("click", castLine);
+$("catchAgain").addEventListener("click", castLine);
+$("catchClose").addEventListener("click", function(){ $("catch").classList.remove("show"); $("fishbtn").focus({preventScroll:true}); });
+
 // Real recordings (ElevenLabs) if present; generated crackle as fallback.
 var fireAudio = new Audio("fogata.mp3"), musicAudio = new Audio("musica.mp3"), usingSynth = false;
-fireAudio.loop = true; fireAudio.volume = 0.6; musicAudio.loop = true; musicAudio.volume = 0.35;
+fireAudio.loop = true; fireAudio.volume = 0.7; musicAudio.loop = true; musicAudio.volume = 0.4;
 $("sound").addEventListener("click", function(){
   var btn = this, on = btn.getAttribute("aria-pressed") === "true";
   var setOn = function(v){ btn.setAttribute("aria-pressed", v ? "true" : "false"); $("soundLabel").textContent = v ? "Apagar sonido" : "Oír la fogata"; };
